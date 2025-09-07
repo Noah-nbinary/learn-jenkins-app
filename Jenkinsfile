@@ -32,8 +32,6 @@ pipeline {
                     echo "Test stage"
                     test -f build/index.html 
                     npm test
-                    ls -la
-                    ls test-results
                 '''
             }
         }
@@ -47,6 +45,7 @@ pipeline {
             }
             steps {
                 sh '''
+                    ls test-results
                     npm install serve
                     node_modules/.bin/serve -s build &
                     sleep 10
