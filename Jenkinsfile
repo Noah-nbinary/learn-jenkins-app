@@ -16,7 +16,6 @@ pipeline {
                     npm --version
                     npm ci
                     npm run build
-                    ls -la                
                 '''
             }
         }
@@ -30,12 +29,10 @@ pipeline {
             }
             steps {
                 sh '''
-                    ls test-results
                     npm install serve
                     node_modules/.bin/serve -s build &
                     sleep 10
                     npx playwright test
-                    ls test-results
                 '''
             }
         }
@@ -52,7 +49,6 @@ pipeline {
                     echo "Test stage"
                     test -f build/index.html 
                     npm test
-                    ls test-results
                 '''
             }
         }
