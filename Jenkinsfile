@@ -93,6 +93,7 @@ pipeline {
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
                     netlify status
                     netlify deploy --no-build --dir=build --prod
+                    echo "It works!!"
                 '''
             }
         }
