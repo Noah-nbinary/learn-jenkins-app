@@ -69,7 +69,7 @@ pipeline {
                         always {
                             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', 
                                 keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', 
-                                reportName: 'Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+                                reportName: 'Playwright local Report', reportTitles: '', useWrapperFileDirectly: true])
                         }
                     }
                 }
@@ -95,6 +95,30 @@ pipeline {
                     netlify deploy --no-build --dir=build --prod
                     echo "It works!!"
                 '''
+            }
+        }
+
+        stage('Prod E2E') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    reuseNode true
+                }
+            }
+            environment {
+                CI_ENVIRONMENT_URL = 'https://gilded-cuchufli-bd92c5.netlify.app'
+            }
+            steps {
+                sh '''
+                    npx playwright test --reporter=html
+                '''
+            }
+            post {
+                always {
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', 
+                        keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', 
+                        reportName: 'Playwright E2E Report', reportTitles: '', useWrapperFileDirectly: true])
+                }
             }
         }
 
